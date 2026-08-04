@@ -1,0 +1,41 @@
+From 63dbf6b3b9e6e781df1a6a64e609b10e23969681 Mon Sep 17 00:00:00 2001
+From: Paul Eggert <eggert@cs.ucla.edu>
+Date: Wed, 15 Apr 2026 12:00:17 -0700
+Subject: [PATCH] gzip: don't mishandle .lzh after .Z
+
+Problem reported by Michal Majchrowicz.
+* unlzh.c (read_c_len): Clear left and right when n == 0.
+
+Fixes CVE-2026-41992: gzip shares the left/right arrays between the LZW
+and LZH decoders and does not reinitialise them between files handled in
+one invocation. Decompressing a crafted .Z followed by a crafted .lzh in
+a single `gzip -d` poisons that state and the LZH decoder then reads past
+the end of the global buffer.
+
+Upstream commit, backported unchanged apart from dropping the NEWS and
+THANKS hunks, which do not apply to the 1.14 release tarball. Fix is not
+in any release yet; 1.14 is current.
+
+Signed-off-by: Rainer Schueler <rainer.schueler@tobrain.org>
+[Upstream: https://git.savannah.gnu.org/cgit/gzip.git/commit/?id=63dbf6b3b9e6]
+---
+ unlzh.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/unlzh.c b/unlzh.c
+index 3320196..a6cf109 100644
+--- a/unlzh.c
++++ b/unlzh.c
+@@ -232,6 +232,12 @@ read_c_len ()
+         c = getbits(CBIT);
+         for (i = 0; i < NC; i++) c_len[i] = 0;
+         for (i = 0; i < 4096; i++) c_table[i] = c;
++
++        /* Needed in case LEFT and RIGHT are reused from a previous
++           LZW decompression.  It may be overkill to clear all of both
++           arrays, but nobody has had time to analyze this carefully.  */
++        memzero(left, (2 * NC - 1) * sizeof *left);
++        memzero(right, (2 * NC - 1) * sizeof *left);
+     } else {
+         i = 0;
+         while (i < n) {
