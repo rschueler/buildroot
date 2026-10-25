@@ -14,7 +14,12 @@ TAR_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
 TAR_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
 # 0002-Fix-savannah-bug-#64441.patch
 # 0003-tests-fix-LDADD.patch
+# 0005-0008: tests/Makefile.am changes (new test cases)
 TAR_AUTORECONF = YES
+
+# 0005-0008: upstream fix chain for CVE-2026-5704 (b8d8a61b, with the
+# commits it depends on and the --no-overwrite-dir regression fix)
+TAR_IGNORE_CVES += CVE-2026-5704
 
 # The package is a dependency to ccache so ccache cannot be a dependency
 HOST_TAR_ADD_CCACHE_DEPENDENCY = NO
