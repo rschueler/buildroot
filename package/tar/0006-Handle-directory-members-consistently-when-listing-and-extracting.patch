@@ -13,17 +13,10 @@ the same rules as during extraction.
 
 (cherry picked from commit b009124ffde415515081db844d7a104e1d1c6c58)
 ---
- src/list.c         | 22 ++++++++++++++++--
- tests/Makefile.am  |  1 +
- tests/skipdir.at   | 56 ++++++++++++++++++++++++++++++++++++++++++++++
- tests/testsuite.at |  3 ++-
- 4 files changed, 79 insertions(+), 3 deletions(-)
- create mode 100644 tests/skipdir.at
-
 diff --git a/src/list.c b/src/list.c
-index e9a68159..928779e1 100644
 --- a/src/list.c
-@@ -1440,6 +1440,23 @@ skip_member (void)
++++ b/src/list.c
+@@ -1440,6 +1440,23 @@
    skim_member (false);
  }
  
@@ -47,7 +40,7 @@ index e9a68159..928779e1 100644
  /* Skip the current member in the archive.
     If MUST_COPY, always copy instead of skipping.  */
  void
-@@ -1447,14 +1464,15 @@ skim_member (bool must_copy)
+@@ -1447,14 +1464,15 @@
  {
    if (!current_stat_info.skipped)
      {
@@ -66,20 +59,19 @@ index e9a68159..928779e1 100644
  
        mv_end ();
 diff --git a/tests/Makefile.am b/tests/Makefile.am
-index 1884b722..6cf726c0 100644
 --- a/tests/Makefile.am
-@@ -240,6 +240,7 @@ TESTSUITE_AT = \
-  shortrec.at\
++++ b/tests/Makefile.am
+@@ -232,6 +232,7 @@
   shortupd.at\
+  shortrec.at\
   sigpipe.at\
 + skipdir.at\
   sparse01.at\
   sparse02.at\
   sparse03.at\
 diff --git a/tests/skipdir.at b/tests/skipdir.at
-new file mode 100644
-index 00000000..7106ee74
---- /dev/null
+--- a/tests/skipdir.at
++++ b/tests/skipdir.at
 @@ -0,0 +1,56 @@
 +# Process this file with autom4te to create testsuite. -*- Autotest -*-
 +
@@ -138,9 +130,9 @@ index 00000000..7106ee74
 +])
 +AT_CLEANUP
 diff --git a/tests/testsuite.at b/tests/testsuite.at
-index 44ae773b..f2229be1 100644
 --- a/tests/testsuite.at
-@@ -464,7 +464,7 @@ AT_BANNER([Volume operations])
++++ b/tests/testsuite.at
+@@ -464,7 +464,7 @@
  m4_include([volume.at])
  m4_include([volsize.at])
  
@@ -149,7 +141,7 @@ index 44ae773b..f2229be1 100644
  m4_include([comprec.at])
  m4_include([shortfile.at])
  m4_include([shortupd.at])
-@@ -473,6 +473,7 @@ m4_include([truncate.at])
+@@ -473,6 +473,7 @@
  m4_include([grow.at])
  m4_include([sigpipe.at])
  m4_include([comperr.at])
@@ -157,6 +149,3 @@ index 44ae773b..f2229be1 100644
  
  AT_BANNER([Removing files after archiving])
  m4_include([remfiles01.at])
--- 
-2.44.1
-
